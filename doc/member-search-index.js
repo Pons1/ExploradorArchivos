@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"app","c":"vista","l":"main(String[])","u":"main(java.lang.String[])"},{"p":"app","c":"vista","l":"senseAccents(String)","u":"senseAccents(java.lang.String)"},{"p":"app","c":"vista","l":"vista()","u":"%3Cinit%3E()"}];updateSearchResults();

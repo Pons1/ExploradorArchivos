@@ -32,6 +32,11 @@ import org.apache.pdfbox.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+/**
+ * Vista principal de l'aplicació de gestió d'arxius, desenvolupada per Adrián
+ * Pons Choví. Aquesta vista permet cercar i reemplaçar textos dins d'arxius de
+ * text i PDFs d'una carpeta.
+ */
 public class vista extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -47,6 +52,9 @@ public class vista extends JFrame {
 	private JTextField txtFRemplaçar;
 	private JButton btnRemplaçar;
 
+	/**
+	 * Metode principal que inicia l'aplicació.
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -60,6 +68,10 @@ public class vista extends JFrame {
 		});
 	}
 
+	/**
+	 * Constructor de la classe vista. Defineix la interfície gràfica i les funcions
+	 * d'usuari.
+	 */
 	public vista() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -234,6 +246,13 @@ public class vista extends JFrame {
 
 	}
 
+	/**
+	 * Llista els arxius d'un directori de manera recursiva.
+	 * 
+	 * @param directori El directori a llistar.
+	 * @param indent    Identació per a visualitzar correctament els subdirectoris.
+	 * @return La llista d'arxius en format text.
+	 */
 	private String llistarArchiusRecursius(File directori, String indent) {
 		File[] archius = directori.listFiles();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -261,6 +280,15 @@ public class vista extends JFrame {
 		return resultado;
 	}
 
+	/**
+	 * Llista i busca una cadena de text dins dels arxius d'un directori de manera
+	 * recursiva.
+	 * 
+	 * @param directori El directori a llistar.
+	 * @param indent    Identació per a visualitzar correctament els subdirectoris.
+	 * @param busqueda  La cadena de text a cercar.
+	 * @return El resultat de la cerca en format text.
+	 */
 	private String llistarArchiusRecursiusYBuscar(File directori, String indent, String busqueda) {
 		File[] archius = directori.listFiles();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -283,7 +311,7 @@ public class vista extends JFrame {
 						String linea;
 						switch (comprobarChBox()) {
 						case 1: {
-							
+
 							if (file.getName().endsWith(".txt")) {
 								coincidencies = 0;
 								while ((linea = br.readLine()) != null) {
@@ -293,20 +321,20 @@ public class vista extends JFrame {
 							} else if (file.getName().endsWith(".pdf")) {
 								coincidencies = 0;
 								PDDocument pdDocument = null;
-						        try { 
-						        	pdDocument = Loader.loadPDF(file);
-						            PDFTextStripper pdfStripper = new PDFTextStripper();
+								try {
+									pdDocument = Loader.loadPDF(file);
+									PDFTextStripper pdfStripper = new PDFTextStripper();
 
-						                String text = pdfStripper.getText(pdDocument);
+									String text = pdfStripper.getText(pdDocument);
 
-						                coincidencies += contarCoincidenciasEnLinea(text, busqueda);
-						            
-						        } catch (IOException e) {
-						            e.printStackTrace();
-						        }
+									coincidencies += contarCoincidenciasEnLinea(text, busqueda);
+
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 
 							}
-							
+
 							break;
 						}
 						case 2: {
@@ -318,17 +346,18 @@ public class vista extends JFrame {
 							} else if (file.getName().endsWith(".pdf")) {
 								coincidencies = 0;
 								PDDocument pdDocument = null;
-						        try { 
-						        	pdDocument = Loader.loadPDF(file);
-						            PDFTextStripper pdfStripper = new PDFTextStripper();
+								try {
+									pdDocument = Loader.loadPDF(file);
+									PDFTextStripper pdfStripper = new PDFTextStripper();
 
-						                String text = pdfStripper.getText(pdDocument);
+									String text = pdfStripper.getText(pdDocument);
 
-						                coincidencies += contarCoincidenciasEnLinea(text.toLowerCase(), busqueda.toLowerCase());
-						            
-						        } catch (IOException e) {
-						            e.printStackTrace();
-						        }
+									coincidencies += contarCoincidenciasEnLinea(text.toLowerCase(),
+											busqueda.toLowerCase());
+
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 							}
 							break;
 						}
@@ -339,20 +368,21 @@ public class vista extends JFrame {
 									coincidencies += contarCoincidenciasEnLinea(senseAccents(linea),
 											senseAccents(busqueda));
 								}
-							}else if (file.getName().endsWith(".pdf")) {
+							} else if (file.getName().endsWith(".pdf")) {
 								coincidencies = 0;
 								PDDocument pdDocument = null;
-						        try { 
-						        	pdDocument = Loader.loadPDF(file);
-						            PDFTextStripper pdfStripper = new PDFTextStripper();
+								try {
+									pdDocument = Loader.loadPDF(file);
+									PDFTextStripper pdfStripper = new PDFTextStripper();
 
-						                String text = pdfStripper.getText(pdDocument);
+									String text = pdfStripper.getText(pdDocument);
 
-						                coincidencies += contarCoincidenciasEnLinea(senseAccents(text), senseAccents(busqueda));
-						            
-						        } catch (IOException e) {
-						            e.printStackTrace();
-						        }
+									coincidencies += contarCoincidenciasEnLinea(senseAccents(text),
+											senseAccents(busqueda));
+
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 							}
 							break;
 						}
@@ -362,33 +392,31 @@ public class vista extends JFrame {
 									coincidencies += contarCoincidenciasEnLinea(senseAccents(linea.toLowerCase()),
 											senseAccents(busqueda.toLowerCase()));
 								}
-							}else if (file.getName().endsWith(".pdf")) {
+							} else if (file.getName().endsWith(".pdf")) {
 								coincidencies = 0;
 								PDDocument pdDocument = null;
-						        try { 
-						        	pdDocument = Loader.loadPDF(file);
-						            PDFTextStripper pdfStripper = new PDFTextStripper();
+								try {
+									pdDocument = Loader.loadPDF(file);
+									PDFTextStripper pdfStripper = new PDFTextStripper();
 
-						                String text = pdfStripper.getText(pdDocument);
+									String text = pdfStripper.getText(pdDocument);
 
-						                coincidencies += contarCoincidenciasEnLinea(senseAccents(text.toLowerCase()), senseAccents(busqueda.toLowerCase()));
-						            
-						        } catch (IOException e) {
-						            e.printStackTrace();
-						        }
+									coincidencies += contarCoincidenciasEnLinea(senseAccents(text.toLowerCase()),
+											senseAccents(busqueda.toLowerCase()));
+
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 							}
 							break;
 						}
 						default: {
 							break;
 						}
-							
-
-							
 
 						}
-						resultado += indent + "|-- " + file.getName() + " (" + "Coincidencias: " + coincidencies
-								+ ")" + "\n";
+						resultado += indent + "|-- " + file.getName() + " (" + "Coincidencias: " + coincidencies + ")"
+								+ "\n";
 					} catch (IOException e) {
 						System.err.println("Error al leer el archivo: " + e.getMessage());
 					}
@@ -399,6 +427,15 @@ public class vista extends JFrame {
 
 	}
 
+	/**
+	 * Llista i reemplaça una cadena de text dins dels arxius d'un directori de
+	 * manera recursiva.
+	 * 
+	 * @param directori El directori a llistar.
+	 * @param indent    Identació per a visualitzar correctament els subdirectoris.
+	 * @param busqueda  La cadena de text a reemplaçar.
+	 * @return El resultat del reemplaçament en format text.
+	 */
 	private String llistarArchiusRecursiusYReemplazar(File directori, String indent, String busqueda) {
 		File[] archius = directori.listFiles();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -486,6 +523,13 @@ public class vista extends JFrame {
 		return resultado;
 	}
 
+	/**
+	 * Conta el numero de voltes que apareix una cadena de text en un text.
+	 * 
+	 * @param linea    La linea de text on se vol buscar la cadena de text.
+	 * @param busqueda La cadena de text a reemplaçar.
+	 * @return El numero de coincidencies.
+	 */
 	private int contarCoincidenciasEnLinea(String linea, String busqueda) {
 		int count = 0;
 		int index = 0;
@@ -496,6 +540,14 @@ public class vista extends JFrame {
 		return count;
 	}
 
+	/**
+	 * Agafa un text i reemplaça la cadena seleccionada per altra y guarda el text
+	 * modificat en un archiu nou.
+	 * 
+	 * @param file     El archiu en el que se desitja reemplaçar la cadena de text.
+	 * @param palabra  La cadena de text a reemplaçar.
+	 * @param remplazo La cadena de text per la que es va a remplaçar.
+	 */
 	private void remplazarPalabra(File file, String palabra, String remplazo) {
 		FileReader fr;
 		try {
@@ -526,6 +578,11 @@ public class vista extends JFrame {
 		}
 	}
 
+	/**
+	 * Comprova si els checkBoxs de la busqueda estàn seleccionats.
+	 * 
+	 * @return Un numero que indica el estats dels checkBoxs.
+	 */
 	private int comprobarChBox() {
 		if (chBoxMajus.isSelected() && chBoxAccents.isSelected()) {
 			return 1;
@@ -539,14 +596,15 @@ public class vista extends JFrame {
 
 	}
 
+	/**
+	 * LLeva els accents del text passat per paràmetre.
+	 * 
+	 * @param str Text a llevar els accents.
+	 * @return El text sense accents.
+	 */
 	public static String senseAccents(String str) {
 		String normalized = Normalizer.normalize(str, Normalizer.Form.NFD);
 		return normalized.replaceAll("\\p{M}", "");
 	}
-	private int contarEnPDF(File f, String paraula) {
-        int cont = 0;
-        
 
-        return cont;
-    }
 }
